@@ -33,7 +33,13 @@ class RecipeImporter
 
       next if normalized_name.blank?
 
+      #ingredient = Ingredient.where("name LIKE ?", "%#{normalized_name}%").first
+
       ingredient = Ingredient.find_or_create_by!(name: normalized_name)
+
+      # TODO. Use transaction
+      #ingredient ||= Ingredient.create!(name: normalized_name)
+
       RecipeIngredient.create!(recipe: recipe, ingredient: ingredient, original_text: original_text)
     end
   end
