@@ -1,4 +1,4 @@
-require 'rails/all'
+require "rails/all"
 
 namespace :import do
   desc "Import recipes from JSON file"
@@ -10,7 +10,7 @@ namespace :import do
     Recipe.delete_all
 
     puts "Importing recipes..."
-    importer = RecipeImporter.new(Rails.root.join('db', 'seeds', 'recipes-en.json'))
+    importer = RecipeImporter.new(Rails.root.join("db", "seeds", "recipes-en.json"))
     importer.call
 
     puts "Done!"

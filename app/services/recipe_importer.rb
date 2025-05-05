@@ -1,5 +1,5 @@
 class RecipeImporter
-  require 'json'
+  require "json"
 
   def initialize(json_path)
     @json_path = json_path
@@ -18,30 +18,23 @@ class RecipeImporter
 
   def create_recipe_with_ingredients(data)
     recipe = Recipe.create!(
-      title: data['title'],
-      cook_time: data['cook_time'],
-      prep_time: data['prep_time'],
-      ratings: data['ratings'],
-      cuisine: data['cuisine'],
-      category: data['category'],
-      author: data['author'],
-      image_url: data['image']
+      title: data["title"],
+      cook_time: data["cook_time"],
+      prep_time: data["prep_time"],
+      ratings: data["ratings"],
+      cuisine: data["cuisine"],
+      category: data["category"],
+      author: data["author"],
+      image_url: data["image"]
     )
 
-    data['ingredients'].each do |original_text|
+    data["ingredients"].each do |original_text|
       normalized_name = IngredientNormalizer.normalize(original_text)
 
       next if normalized_name.blank?
 
-      #ingredient = Ingredient.where("name LIKE ?", "%#{normalized_name}%").first
-
       ingredient = Ingredient.find_or_create_by!(name: normalized_name)
-
-      # TODO. Use transaction
-      #ingredient ||= Ingredient.create!(name: normalized_name)
-
       RecipeIngredient.create!(recipe: recipe, ingredient: ingredient, original_text: original_text)
     end
   end
-
 end
