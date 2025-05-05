@@ -7,7 +7,7 @@ class Recipe < ApplicationRecord
   def self.with_ingredients(ingredient_names)
     joins(:ingredients)
       .where(ingredients: { name: ingredient_names.map(&:downcase) })
-      .group('recipes.id')
-      .order('COUNT(ingredients.id) DESC')
+      .group("recipes.id")
+      .order("COUNT(ingredients.id) DESC")
   end
 end

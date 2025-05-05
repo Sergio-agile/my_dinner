@@ -1,4 +1,4 @@
-require 'active_support/inflector'
+require "active_support/inflector"
 
 class IngredientNormalizer
   UNITS = %w[
@@ -31,20 +31,20 @@ class IngredientNormalizer
 
     part = part
       .downcase
-      .gsub(/\(.*?\)/, '')                             # remove anything in parentheses
-      .gsub(/[\u00BC-\u00BE\u2150-\u215E]/, '')        # remove uncommon unicode fractions
-      .gsub(/\A[\d\s\/\.\-]+/, '')                     # remove leading quantities and punctuation
-      .gsub(/\b(#{UNITS.join('|')})\b/, '')
-      .gsub(/\b(#{PREPARATIONS.join('|')})\b/, '')
-      .gsub(/\b(#{ADJECTIVES.join('|')})\b/, '')
-      .gsub(/\b(#{ADVERBS.join('|')})\b/, '')
-      .gsub(/\b(#{PREPOSITIONS.join('|')})\b/, '')
-      .gsub(/\b(#{CONJUNCTIONS.join('|')})\b/, '')
-      .gsub(/\b\w+ed\b/, '')                          # remove verbs ending in -ed
-      .gsub(/\b\w+ing\b/, '')                         # remove verbs ending in -ing
-      .gsub(/'s\b/, '')                               # remove possessive endings
-      .gsub(/[\-,\.]/, '')                            # remove punctuation
-      .gsub(/\s+/, ' ')                               # normalize whitespace
+      .gsub(/\(.*?\)/, "")                             # remove anything in parentheses
+      .gsub(/[\u00BC-\u00BE\u2150-\u215E]/, "")        # remove uncommon unicode fractions
+      .gsub(/\A[\d\s\/\.\-]+/, "")                     # remove leading quantities and punctuation
+      .gsub(/\b(#{UNITS.join("|")})\b/, "")
+      .gsub(/\b(#{PREPARATIONS.join("|")})\b/, "")
+      .gsub(/\b(#{ADJECTIVES.join("|")})\b/, "")
+      .gsub(/\b(#{ADVERBS.join("|")})\b/, "")
+      .gsub(/\b(#{PREPOSITIONS.join("|")})\b/, "")
+      .gsub(/\b(#{CONJUNCTIONS.join("|")})\b/, "")
+      .gsub(/\b\w+ed\b/, "")                          # remove verbs ending in -ed
+      .gsub(/\b\w+ing\b/, "")                         # remove verbs ending in -ing
+      .gsub(/"s\b/, "")                               # remove possessive endings
+      .gsub(/[\-,\.]/, "")                            # remove punctuation
+      .gsub(/\s+/, " ")                               # normalize whitespace
       .strip
       .singularize
 
