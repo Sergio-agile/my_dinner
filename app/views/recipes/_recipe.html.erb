@@ -1,4 +1,4 @@
-<%= link_to recipe_path(recipe, q: params[:q]), class: "block" do %>
+<%= link_to recipe_path(recipe, q: params[:q], page: params[:page]), class: "block" do %>
   <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
     <% if recipe.image_url.present? %>
       <img src="https://www.allrecipes.com/img/misc/og-default.png" alt="<%= recipe.title %>" class="w-full h-48 object-cover">

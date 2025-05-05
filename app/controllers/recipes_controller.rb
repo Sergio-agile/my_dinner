@@ -1,6 +1,6 @@
 class RecipesController < ApplicationController
   def index
-    @recipes = filtered_recipes
+    @pagy, @recipes = pagy_array(filtered_recipes, items: 12)
 
     respond_to do |format|
       format.html
