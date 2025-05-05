@@ -32,33 +32,63 @@ class RecipesController < ApplicationController
   #     Recipe.all
   #   end
   # end
+  # def filtered_recipes
+  #   return Recipe.all if params[:q].blank?
+
+  #   query = params[:q].downcase
+  #   keywords = query.split(/[,\s]+/).map(&:strip).reject(&:blank?)
+
+  #   # Recipes with title matches (ranked by number of keyword matches)
+  #   title_matches = Recipe
+  #     .where(keywords.map { "LOWER(title) LIKE ?" }.join(" OR "), *keywords.map { |kw| "%#{kw}%" })
+  #     .select("recipes.*, (#{keywords.map { |kw| "CASE WHEN LOWER(title) LIKE '%#{kw}%' THEN 1 ELSE 0 END" }.join(" + ")}) AS title_match_count")
+  #     .order("title_match_count DESC")
+
+  #   # Recipes with ingredient matches (excluding title matches), ranked by count
+  #   ingredient_matches = Recipe
+  #     .joins(:ingredients)
+  #     .where(ingredients: { name: keywords })
+  #     .where.not(id: title_matches.map(&:id))
+  #     .group("recipes.id")
+  #     .select("recipes.*, COUNT(ingredients.id) AS ingredient_match_count")
+  #     .order("ingredient_match_count DESC")
+
+  #   @recipes = title_matches + ingredient_matches
+  # end
   def filtered_recipes
     return Recipe.all if params[:q].blank?
 
-    query = params[:q].downcase
+    query = params[:q].to_s.downcase
     keywords = query.split(/[,\s]+/).map(&:strip).reject(&:blank?)
 
-    # Recipes with title matches (ranked by number of keyword matches)
+    return Recipe.none if keywords.empty?
+
+    # WHERE clause for title matching
+    where_clauses = keywords.map { "LOWER(title) LIKE ?" }.join(" OR ")
+    where_values = keywords.map { |kw| "%#{kw}%" }
+
+    # Build scoring expression safely with sanitized values
+    title_score_expr = keywords.map do |kw|
+      sanitized_kw = ActiveRecord::Base.connection.quote("%#{kw}%")
+      "CASE WHEN LOWER(title) LIKE #{sanitized_kw} THEN 1 ELSE 0 END"
+    end.join(" + ")
+
     title_matches = Recipe
-      .where(keywords.map { "LOWER(title) LIKE ?" }.join(" OR "), *keywords.map { |kw| "%#{kw}%" })
-      .select("recipes.*, (#{keywords.map { |kw| "CASE WHEN LOWER(title) LIKE '%#{kw}%' THEN 1 ELSE 0 END" }.join(" + ")}) AS title_match_count")
+      .where(where_clauses, *where_values)
+      .select("recipes.*, (#{title_score_expr}) AS title_match_count")
       .order("title_match_count DESC")
 
-    # Recipes with ingredient matches (excluding title matches), ranked by count
+    # Ingredient match, excluding already found recipes
+    title_match_ids = title_matches.map(&:id)
+
     ingredient_matches = Recipe
       .joins(:ingredients)
       .where(ingredients: { name: keywords })
-      .where.not(id: title_matches.map(&:id))
+      .where.not(id: title_match_ids)
       .group("recipes.id")
       .select("recipes.*, COUNT(ingredients.id) AS ingredient_match_count")
       .order("ingredient_match_count DESC")
 
     @recipes = title_matches + ingredient_matches
   end
-
-
-
-
-
-
 end
