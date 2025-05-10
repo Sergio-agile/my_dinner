@@ -1,5 +1,8 @@
-<div class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-lg shadow">
-  <h1 class="text-3xl font-bold text-gray-900 mb-4"><%= @recipe.title %></h1>
+<div class="max-w-3xl mx-auto mt-6 p-6 bg-white rounded-lg shadow">
+  <div class="mb-4">
+    <%= link_to "← Back to Recipes", recipes_path(q: params[:q], page: params[:page], sort: params[:sort]), class: "text-orange-600 hover:underline font-semibold" %>
+  </div>
+  <h2 class="text-3xl font-bold text-gray-900 mb-4"><%= @recipe.title %></h2>
 
   <% if @recipe.image_url.present? %>
     <img src="https://www.allrecipes.com/img/misc/og-default.png" alt="<%= @recipe.title %>" class="w-full h-64 object-cover rounded mb-6">
@@ -23,5 +26,5 @@
     </ul>
   <% end %>
 
-  <%= link_to "← Back to Recipes", recipes_path(q: params[:q], page: params[:page]), class: "inline-block mt-6 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700" %>
+  <%= link_to "← Back to Recipes", recipes_path(q: params[:q], page: params[:page], sort: params[:sort]), class: "inline-block mt-6 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700" %>
 </div>
