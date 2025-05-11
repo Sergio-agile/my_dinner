@@ -40,7 +40,7 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 gem "cssbundling-rails"
-gem "pagy", "~> 5.10"
+gem "pagy", "~> 9.3.4"
 gem "pg"
 
 group :development, :test do
