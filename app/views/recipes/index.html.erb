@@ -1,10 +1,14 @@
 <div class="m-5">
   <h1 class="text-6xl text-center font-bold text-gray-900 mb-4">Welcome to Recipe Saver!</h1>
   <h2 class="text-2xl text-center text-gray-900 mb-8">Enter your ingredients below and discover what you can cook. Voilà!</h1>
+
   <%= render 'shared/search_bar' %>
+
   <div class="m-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     <%= render @recipes %>
   </div>
+
   <%= pagination(@pagy) %>
+
 </div>
 
